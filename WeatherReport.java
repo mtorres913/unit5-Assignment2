@@ -1,8 +1,9 @@
+import java.io.*;
 import java.util.LinkedList;
 
 public class WeatherReport {
     LinkedList<Temperature> temps;
-
+ // constructor with hardcoded test data
     public WeatherReport() {
         temps = new LinkedList<>();
         temps.add(new Temperature("Phoenix", "AZ", 75, 105));
@@ -14,5 +15,23 @@ public class WeatherReport {
         temps.add(new Temperature("Dallas", "TX", 60, 90));
         temps.add(new Temperature("Minneapolis", "MN", 30, 60));
         temps.add(new Temperature("San Diego", "CA", 62, 77));
+    }
+
+      // constructor that reads from a file
+    public WeatherReport(String filename) {
+        temps = new LinkedList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line = reader.readLine(); // Skip header
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                String city = parts[1];
+                String state = parts[10];
+                int high = Integer.parseInt(parts[5]);
+                int low = Integer.parseInt(parts[6]);
+                temps.add(new Temperature(city, state, low, high));
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+        }
     }
 }
