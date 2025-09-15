@@ -34,4 +34,16 @@ public class WeatherReport {
             System.err.println("Error reading file: " + e.getMessage());
         }
     }
+
+    public boolean isSortedByCity() {
+    for (int i = 0; i < temps.size() - 1; i++) {
+        String currentCity = temps.get(i).city;
+        String nextCity = temps.get(i + 1).city;
+        if (currentCity.compareToIgnoreCase(nextCity) > 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
 }
