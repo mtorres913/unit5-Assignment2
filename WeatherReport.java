@@ -3,7 +3,7 @@ import java.util.LinkedList;
 
 public class WeatherReport {
     LinkedList<Temperature> temps;
- // constructor with hardcoded test data
+
     public WeatherReport() {
         temps = new LinkedList<>();
         temps.add(new Temperature("Phoenix", "AZ", 75, 105));
@@ -17,7 +17,6 @@ public class WeatherReport {
         temps.add(new Temperature("San Diego", "CA", 62, 77));
     }
 
-      // constructor that reads from a file
     public WeatherReport(String filename) {
         temps = new LinkedList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -36,14 +35,23 @@ public class WeatherReport {
     }
 
     public boolean isSortedByCity() {
-    for (int i = 0; i < temps.size() - 1; i++) {
-        String currentCity = temps.get(i).city;
-        String nextCity = temps.get(i + 1).city;
-        if (currentCity.compareToIgnoreCase(nextCity) > 0) {
-            return false;
+        for (int i = 0; i < temps.size() - 1; i++) {
+            String currentCity = temps.get(i).city;
+            String nextCity = temps.get(i + 1).city;
+            if (currentCity.compareToIgnoreCase(nextCity) > 0) {
+                return false;
+            }
         }
+        return true;
     }
-    return true;
-}
+
+    public boolean isSortedByHigh() {
+        for (int i = 0; i < temps.size() - 1; i++) {
+            if (temps.get(i).high > temps.get(i + 1).high) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }
