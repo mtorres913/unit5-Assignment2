@@ -1,5 +1,7 @@
 import java.io.*;
 import java.util.LinkedList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class WeatherReport {
     LinkedList<Temperature> temps;
@@ -53,5 +55,14 @@ public class WeatherReport {
         }
         return true;
     }
-
+    
+public void sortWithCollections(String by) {
+    if (by.equalsIgnoreCase("City")) {
+        Collections.sort(temps, Comparator.comparing(t -> t.city.toLowerCase()));
+    } else if (by.equalsIgnoreCase("High")) {
+        Collections.sort(temps, Comparator.comparingInt(t -> t.high));
+    } else {
+        System.err.println("Invalid sort key: " + by);
+    }
+}
 }
