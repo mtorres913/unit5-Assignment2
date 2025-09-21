@@ -55,52 +55,54 @@ public class WeatherReport {
         }
         return true;
     }
-    
-public void sortWithCollections(String by) {
-    if (by.equalsIgnoreCase("City")) {
-        Collections.sort(temps, Comparator.comparing(t -> t.city.toLowerCase()));
-    } else if (by.equalsIgnoreCase("High")) {
-        Collections.sort(temps, Comparator.comparingInt(t -> t.high));
-    } else {
-        System.err.println("Invalid sort key: " + by);
-    }
-}
-public void sortWithMerge(String by) {
-    temps = mergeSort(temps, by);
-}
 
-private LinkedList<Temperature> mergeSort(LinkedList<Temperature> list, String by) {
-    if (list.size() <= 1) return list;
-
-    int mid = list.size() / 2;
-    LinkedList<Temperature> left = new LinkedList<>(list.subList(0, mid));
-    LinkedList<Temperature> right = new LinkedList<>(list.subList(mid, list.size()));
-
-    return merge(mergeSort(left, by), mergeSort(right, by), by);
-}
-
-private LinkedList<Temperature> merge(LinkedList<Temperature> left, LinkedList<Temperature> right, String by) {
-    LinkedList<Temperature> result = new LinkedList<>();
-
-    while (!left.isEmpty() && !right.isEmpty()) {
-        Temperature l = left.peek();
-        Temperature r = right.peek();
-
-        boolean takeLeft;
+    public void sortWithCollections(String by) {
         if (by.equalsIgnoreCase("City")) {
-            takeLeft = l.city.compareToIgnoreCase(r.city) <= 0;
+            Collections.sort(temps, Comparator.comparing(t -> t.city.toLowerCase()));
         } else if (by.equalsIgnoreCase("High")) {
-            takeLeft = l.high <= r.high;
+            Collections.sort(temps, Comparator.comparingInt(t -> t.high));
         } else {
-            throw new IllegalArgumentException("Invalid sort key: " + by);
+            System.err.println("Invalid sort key: " + by);
+        }
+    }
+
+    public void sortWithMerge(String by) {
+        temps = mergeSort(temps, by);
+    }
+
+    private LinkedList<Temperature> mergeSort(LinkedList<Temperature> list, String by) {
+        if (list.size() <= 1)
+            return list;
+
+        int mid = list.size() / 2;
+        LinkedList<Temperature> left = new LinkedList<>(list.subList(0, mid));
+        LinkedList<Temperature> right = new LinkedList<>(list.subList(mid, list.size()));
+
+        return merge(mergeSort(left, by), mergeSort(right, by), by);
+    }
+
+    private LinkedList<Temperature> merge(LinkedList<Temperature> left, LinkedList<Temperature> right, String by) {
+        LinkedList<Temperature> result = new LinkedList<>();
+
+        while (!left.isEmpty() && !right.isEmpty()) {
+            Temperature l = left.peek();
+            Temperature r = right.peek();
+
+            boolean takeLeft;
+            if (by.equalsIgnoreCase("City")) {
+                takeLeft = l.city.compareToIgnoreCase(r.city) <= 0;
+            } else if (by.equalsIgnoreCase("High")) {
+                takeLeft = l.high <= r.high;
+            } else {
+                throw new IllegalArgumentException("Invalid sort key: " + by);
+            }
+
+            result.add(takeLeft ? left.poll() : right.poll());
         }
 
-        result.add(takeLeft ? left.poll() : right.poll());
+        result.addAll(left);
+        result.addAll(right);
+        return result;
     }
-
-    result.addAll(left);
-    result.addAll(right);
-    return result;
-}
 
 }
