@@ -52,25 +52,40 @@ public class WeatherReport {
 
         return stateToRange;
     }
-    public List<StateRange> computeByList() {
-    List<StateRange> result = new ArrayList<>();
 
-    for (WindSpeed ws : speeds) {
-        boolean found = false;
-        for (StateRange sr : result) {
-            if (sr.state.equals(ws.state)) {
-                sr.update(ws.value);
-                found = true;
-                break;
+    public List<StateRange> computeByList() {
+        List<StateRange> result = new ArrayList<>();
+
+        for (WindSpeed ws : speeds) {
+            boolean found = false;
+            for (StateRange sr : result) {
+                if (sr.state.equals(ws.state)) {
+                    sr.update(ws.value);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                result.add(new StateRange(ws.state, ws.value));
             }
         }
-        if (!found) {
-            result.add(new StateRange(ws.state, ws.value));
-        }
+
+        return result;
     }
 
-    return result;
-}
+    public TreeMap<String, StateRange> computeByTree() {
+        TreeMap<String, StateRange> result = new TreeMap<>();
+
+        for (WindSpeed ws : speeds) {
+            if (result.containsKey(ws.state)) {
+                result.get(ws.state).update(ws.value);
+            } else {
+                result.put(ws.state, new StateRange(ws.state, ws.value));
+            }
+        }
+
+        return result;
+    }
 
     public void printWindSpeedRanges() {
         Map<String, Double> ranges = getWindSpeedRangeByState();
@@ -78,12 +93,19 @@ public class WeatherReport {
             System.out.printf("%s: %.2f mph%n", entry.getKey(), entry.getValue());
         }
     }
-    
+
     public void printListRanges() {
-    List<StateRange> ranges = computeByList();
-    for (StateRange sr : ranges) {
-        System.out.printf("%s: %.2f mph%n", sr.state, sr.getRange());
+        List<StateRange> ranges = computeByList();
+        for (StateRange sr : ranges) {
+            System.out.printf("%s: %.2f mph%n", sr.state, sr.getRange());
+        }
     }
-}
+
+    public void printTreeRanges() {
+        TreeMap<String, StateRange> ranges = computeByTree();
+        for (Map.Entry<String, StateRange> entry : ranges.entrySet()) {
+            System.out.printf("%s: %.2f mph%n", entry.getKey(), entry.getValue().getRange());
+        }
+    }
 
 }

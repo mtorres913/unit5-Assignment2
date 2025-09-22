@@ -1,12 +1,14 @@
 public class Main {
     public static void main(String[] args) {
-        // Use test data constructor
         WeatherReport report = new WeatherReport();
 
-        // Print wind speed ranges
+        System.out.println("=== Map-based Wind Speed Ranges ===");
         report.printWindSpeedRanges();
 
-        // Print list ranges
+        System.out.println("\n=== List-based Wind Speed Ranges ===");
         report.printListRanges();
+
+        System.out.println("\n=== TreeMap-based Wind Speed Ranges ===");
+        report.printTreeRanges();
     }
 }
