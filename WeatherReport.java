@@ -52,10 +52,38 @@ public class WeatherReport {
 
         return stateToRange;
     }
+    public List<StateRange> computeByList() {
+    List<StateRange> result = new ArrayList<>();
+
+    for (WindSpeed ws : speeds) {
+        boolean found = false;
+        for (StateRange sr : result) {
+            if (sr.state.equals(ws.state)) {
+                sr.update(ws.value);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            result.add(new StateRange(ws.state, ws.value));
+        }
+    }
+
+    return result;
+}
+
     public void printWindSpeedRanges() {
         Map<String, Double> ranges = getWindSpeedRangeByState();
         for (Map.Entry<String, Double> entry : ranges.entrySet()) {
             System.out.printf("%s: %.2f mph%n", entry.getKey(), entry.getValue());
         }
     }
+    
+    public void printListRanges() {
+    List<StateRange> ranges = computeByList();
+    for (StateRange sr : ranges) {
+        System.out.printf("%s: %.2f mph%n", sr.state, sr.getRange());
+    }
+}
+
 }

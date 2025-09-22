@@ -5,5 +5,8 @@ public class Main {
 
         // Print wind speed ranges
         report.printWindSpeedRanges();
+
+        // Print list ranges
+        report.printListRanges();
     }
 }
